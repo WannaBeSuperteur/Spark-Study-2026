@@ -14,28 +14,28 @@
 * Progress: ⬜ (TO-DO), 💨 (ING), ✅ (DONE)
 * [Gemini 질문/답변](Gemini_question_answer.txt)
 
-| Date                   | Plan                                                               | Progress |
-|------------------------|--------------------------------------------------------------------|----------|
-| 08.02 일 (1d)           | (pyspark 설치) ```pyspark 4.2.0```                                   | ✅        |
-| 08.02 일 (1d)           | 기초 PySpark DataFrame 만들고 확인하기                                      | ✅        |
-| 08.03 월 - 08.06 목 (4d) | **1. Spark 동작 원리 / 핵심 개념**                                         | ⬜        |
-| 08.03 월 (1d)           | - 1-1. Spark 클러스터 아키텍처                                             | ⬜        |
-| 08.04 화 (1d)           | - 1-2. RDD vs DataFrame vs Spark SQL                               | ⬜        |
-| 08.05 수 - 08.06 목 (2d) | - 1-3. 지연 연산(Lazy Evaluation)과 DAG                                 | ⬜        |
-| 08.07 금 - 08.08 토 (2d) | **2. DataFrame 기본 변환 및 처리**                                        | ⬜        |
-| 08.07 금 (1d)           | - 2-1. 명시적 스키마(Schema) 정의 및 파일 I/O                                 | ⬜        |
-| 08.08 토 (1d)           | - 2-2. 핵심 Transformation & Action 연산                               | ⬜        |
-| 08.08 토 (1d)           | - 2-3. Spark Built-in 함수 vs PySpark UDF (User Defined Function)    | ⬜        |
-| 08.08 토 - 08.09 일 (2d) | **3. 파일 및 저장 최적화**                                                 | ⬜        |
-| 08.08 토 (1d)           | - 3-1. 대용량 파일 포맷 및 압축 (Parquet, ORC, Snappy)                       | ⬜        |
-| 08.09 일 (1d)           | - 3-2. 파티셔닝(Partitioning) & 버케팅(Bucketing)                         | ⬜        |
-| 08.09 일 - 08.12 수 (4d) | **4. 메모리 관리 및 성능 튜닝**                                              | ⬜        |
-| 08.09 일 (1d)           | - 4-1. 파티션 제어와 셔플링(Shuffling): ```repartition``` vs ```coalesce``` | ⬜        |
-| 08.10 월 (1d)           | - 4-2. 메모리 캐싱 전략: ```cache()``` & ```persist()```                  | ⬜        |
-| 08.11 화 (1d)           | - 4-3. Join 최적화 및 Data Skew(데이터 편향) 대응                             | ⬜        |
-| 08.12 수 (1d)           | - 4-4. Spark UI 분석 및 병목 진단                                         | ⬜        |
-| 08.13 목 - 08.15 토 (3d) | **5. 실전 트러블슈팅 및 확장**                                               | ⬜        |
-| 08.13 목 (1d)           | - 5-1. Out of Memory (OOM) 예외 트러블슈팅                                | ⬜        |
-| 08.14 금 (1d)           | - 5-2. PySpark Pandas API (formerly Koalas) 연동                     | ⬜        |
-| 08.15 토 (1d)           | - 5-3. 메모리 효율적인 대용량 ETL 파이프라인 구축 실습                                | ⬜        |
+| Date                       | Plan                                                               | Progress |
+|----------------------------|--------------------------------------------------------------------|----------|
+| 08.02 일 (1d)               | (pyspark 설치) ```pyspark 4.2.0```                                   | ✅        |
+| 08.02 일 (1d)               | 기초 PySpark DataFrame 만들고 확인하기                                      | ✅        |
+| **08.03 월 - 08.06 목 (4d)** | **1. Spark 동작 원리 / 핵심 개념**                                         | ⬜        |
+| 08.03 월 (1d)               | - 1-1. Spark 클러스터 아키텍처                                             | ⬜        |
+| 08.04 화 (1d)               | - 1-2. RDD vs DataFrame vs Spark SQL                               | ⬜        |
+| 08.05 수 - 08.06 목 (2d)     | - 1-3. 지연 연산(Lazy Evaluation)과 DAG                                 | ⬜        |
+| **08.07 금 - 08.08 토 (2d)** | **2. DataFrame 기본 변환 및 처리**                                        | ⬜        |
+| 08.07 금 (1d)               | - 2-1. 명시적 스키마(Schema) 정의 및 파일 I/O                                 | ⬜        |
+| 08.08 토 (1d)               | - 2-2. 핵심 Transformation & Action 연산                               | ⬜        |
+| 08.08 토 (1d)               | - 2-3. Spark Built-in 함수 vs PySpark UDF (User Defined Function)    | ⬜        |
+| **08.08 토 - 08.09 일 (2d)** | **3. 파일 및 저장 최적화**                                                 | ⬜        |
+| 08.08 토 (1d)               | - 3-1. 대용량 파일 포맷 및 압축 (Parquet, ORC, Snappy)                       | ⬜        |
+| 08.09 일 (1d)               | - 3-2. 파티셔닝(Partitioning) & 버케팅(Bucketing)                         | ⬜        |
+| **08.09 일 - 08.12 수 (4d)** | **4. 메모리 관리 및 성능 튜닝**                                              | ⬜        |
+| 08.09 일 (1d)               | - 4-1. 파티션 제어와 셔플링(Shuffling): ```repartition``` vs ```coalesce``` | ⬜        |
+| 08.10 월 (1d)               | - 4-2. 메모리 캐싱 전략: ```cache()``` & ```persist()```                  | ⬜        |
+| 08.11 화 (1d)               | - 4-3. Join 최적화 및 Data Skew(데이터 편향) 대응                             | ⬜        |
+| 08.12 수 (1d)               | - 4-4. Spark UI 분석 및 병목 진단                                         | ⬜        |
+| **08.13 목 - 08.15 토 (3d)** | **5. 실전 트러블슈팅 및 확장**                                               | ⬜        |
+| 08.13 목 (1d)               | - 5-1. Out of Memory (OOM) 예외 트러블슈팅                                | ⬜        |
+| 08.14 금 (1d)               | - 5-2. PySpark Pandas API (formerly Koalas) 연동                     | ⬜        |
+| 08.15 토 (1d)               | - 5-3. 메모리 효율적인 대용량 ETL 파이프라인 구축 실습                                | ⬜        |
 
