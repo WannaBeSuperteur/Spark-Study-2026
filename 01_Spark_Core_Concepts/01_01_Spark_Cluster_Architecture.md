@@ -1,6 +1,58 @@
 
-## Spark 의 node 구성
+## 목차
 
+* [1. Spark 의 node 구성](#1-spark-의-node-구성)
+  * [1-1. Driver와 Executor](#1-1-driver와-executor)
+* [2. 클러스터 매니저 (Cluster Manager)](#2-클러스터-매니저-cluster-manager)
+* [3. 스토리지 (Storage)](#3-스토리지-storage)
+
+## 1. Spark 의 node 구성
+
+* Spark 클러스터는 **Master node와 Worker node** 로 구성된다.
+  * **마스터-슬레이브** 구조에 해당한다.
+
+| 구분          | 설명                                                            |
+|-------------|---------------------------------------------------------------|
+| Master Node | - 전체 클러스터 관리<br>- 사용자가 만든 **데이터 분석 프로그램 (Driver Program)** 실행 |
+| Worker Node | 데이터를 분산 처리 및 작업하는 Machine                                     |
+
+* Spark 의 작동 순서는 다음과 같다.
+  * Driver Program을 스파크 클러스터에 올려서 **JOB을 생성** 한다.
+  * JOB이 **Worker Node로 로딩** 되며, 데이터는 **여러 서버의 메모리에 분산** 저장된다. (RDD)
+  * 로딩된 데이터 (RDD) 를 프로그램을 통해 처리한다.
+* JOB 과 Task
+  * 하나의 JOB은 **여러 worker node에 분산** 실행된다. 즉 **하나의 JOB은 여러 Task로 분리 실행** 된다. 
+  * **Executor** 는 이렇게 나눠진 Task를 실행한다.
+
+### 1-1. Driver와 Executor
+
+* Driver와 Executor의 차이는 다음과 같다.
+
+| 구분       | 설명                                                                              |
+|----------|---------------------------------------------------------------------------------|
+| Driver   | **스파크 애플리케이션 실행** 프로세스<br>- ```SparkContext``` 객체 생성, 스파크 애플리케이션 라이프사이클 관리 등 수행 |
+| Executor | **Task 실행** 담당 에이전트 (실제 작업 수행)<br>- Task 단위로 작업 실행 후, 결과를 드라이버에게 알림             |
+
+## 2. 클러스터 매니저 (Cluster Manager)
+
+**클러스터 매니저 (Cluster Manager)** 는 클러스터 내에서 Worker의 리소스 관리 및 Task 배치를 담당한다.
+
+* 클러스터 매니저는 일종의 **스파크 Runtime** 이다.
+* Driver Program은 ```SparkContext``` 라는 객체를 통해 클러스터 매니저와 통신한다. (자원 관리, 애플리케이션 라이프사이클 관리 등)
+
+클러스터 매니저의 유형은 다음과 같다.
+
+| 유형                 | 설명                                                                    | 적합한 환경     |
+|--------------------|-----------------------------------------------------------------------|------------|
+| Standalone         | 하나의 머신 내에서 Spark 운영                                                   | 로컬 개발 환경 등 |
+| YARN               | YARN (Hadoop 2.x 의 리소스 매니저) 이 클러스터에 Task 배치                           |            |
+| SIMR (Spark in MR) | - Hadoop Map Reduce 안에 Task를 Mapping 하는 방법<br>- Hadoop 1.x 이하 버전에서 사용 |            |
+
+## 3. 스토리지 (Storage)
+
+* Spark의 데이터 처리 방식은 **메모리 기반** 이다.
+* 그러나, Spark는 **외부 스토리지는 포함하지 않으므로**, 외부 스토리지는 **별도로** 사용해야 한다.
+* 자주 사용되는 외부 스토리지로는 **HDFS 분산 파일 시스템 (Hadoop), AWS S3, Google Cloud Storage (GCS)** 등이 있다.
 
 ## 참고 자료
 
