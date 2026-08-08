@@ -1,0 +1,11 @@
+name,gender,age,birthday,used_as_character,score
+Oh-LoRA,female,22,2003-10-11,True,85.5
+An Yujin,female,22,2003-09-01,False,90.1
+Jang Wonyoung,female,21,2004-08-31,True,83.1
+Kim Minjae,male,30,1996-08-08,True,84.0
+Lee Minsu,male,25,2001-08-08,False,78.0
+Gini,female,22,2004-02-03,False,99.9
+Genie,male,40,1986-08-08,False,90.0
+Namoo Kim,male,35,1991-08-08,False,80.8
+,male,37,1989-01-01,True,
+Mr. Null,,20,2006-01-01,,
