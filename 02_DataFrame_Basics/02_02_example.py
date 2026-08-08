@@ -3,7 +3,7 @@ import os
 import sys
 
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import col, concat, floor, lit, current_date, months_between, round
+from pyspark.sql.functions import col, concat, floor, lit, current_date, months_between, round, isnan
 from pyspark.sql import functions as F
 
 os.environ["PYSPARK_PYTHON"] = sys.executable
@@ -129,3 +129,16 @@ if __name__ == '__main__':
     print("5-2. 한번에 여러 컬럼 삭제")
     df.drop("birthday", "used_as_character").show()
 
+    print('==== 6. 결측치가 있는 row 확인 및 삭제하기 ====')
+
+    # 6-1. 결측치가 있는 row 확인하기
+    print("6-1. 결측치가 있는 row 확인하기")
+    df.filter(col("gender").isNull()).show()
+    df.filter(col("score").isNull()).show()
+
+    # 6-2. 결측치를 대체하기
+    print("6-2. 결측치 대체하기")
+    avg_score = df.select(F.avg("score")).first()[0]
+    print(f"avg_score : {avg_score}")
+    df.fillna(value=avg_score, subset="score").show()
+    df.na.fill(value="no gender info provided", subset=["gender"]).show()

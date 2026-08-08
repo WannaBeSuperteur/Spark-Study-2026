@@ -567,6 +567,7 @@ df.drop("birthday", "used_as_character").show()
 * 실행 결과
 
 ```
+5-2. 한번에 여러 컬럼 삭제
 +-------------+------+---+-----+
 |         name|gender|age|score|
 +-------------+------+---+-----+
@@ -584,6 +585,84 @@ df.drop("birthday", "used_as_character").show()
 ```
 
 ## 6. 결측치 row 찾고 대체하기 ```isNull()``` ```fillna()```
+
+**6-1. 결측치가 있는 row 확인하기 (```isNull()```)**
+
+* 예제 코드
+
+```python
+# 6-1. 결측치가 있는 row 확인하기
+print("6-1. 결측치가 있는 row 확인하기")
+df.filter(col("gender").isNull()).show()
+df.filter(col("score").isNull()).show()
+```
+
+* 실행 결과
+
+```
+6-1. 결측치가 있는 row 확인하기
++--------+------+---+----------+-----------------+-----+
+|    name|gender|age|  birthday|used_as_character|score|
++--------+------+---+----------+-----------------+-----+
+|Mr. Null|  NULL| 20|2006-01-01|             NULL| NULL|
++--------+------+---+----------+-----------------+-----+
+
++--------+------+---+----------+-----------------+-----+
+|    name|gender|age|  birthday|used_as_character|score|
++--------+------+---+----------+-----------------+-----+
+|    NULL|  male| 37|1989-01-01|             true| NULL|
+|Mr. Null|  NULL| 20|2006-01-01|             NULL| NULL|
++--------+------+---+----------+-----------------+-----+
+```
+
+**6-2. 결측치 대체하기 (```fillna()```, ```na.fill()```)**
+
+* 예제 코드
+
+```python
+# 6-2. 결측치를 대체하기
+print("6-2. 결측치 대체하기")
+avg_score = df.select(F.avg("score")).first()[0]
+print(f"avg_score : {avg_score}")
+df.fillna(value=avg_score, subset="score").show()
+df.na.fill(value="no gender info provided", subset=["gender"]).show()
+```
+
+* 실행 결과
+
+```
+6-2. 결측치 대체하기
+avg_score : 86.425
++-------------+------+---+----------+-----------------+------+
+|         name|gender|age|  birthday|used_as_character| score|
++-------------+------+---+----------+-----------------+------+
+|      Oh-LoRA|female| 22|2003-10-11|             true|  85.5|
+|     An Yujin|female| 22|2003-09-01|            false|  90.1|
+|Jang Wonyoung|female| 21|2004-08-31|             true|  83.1|
+|   Kim Minjae|  male| 30|1996-08-08|             true|  84.0|
+|    Lee Minsu|  male| 25|2001-08-08|            false|  78.0|
+|         Gini|female| 22|2004-02-03|            false|  99.9|
+|        Genie|  male| 40|1986-08-08|            false|  90.0|
+|    Namoo Kim|  male| 35|1991-08-08|            false|  80.8|
+|         NULL|  male| 37|1989-01-01|             true|86.425|
+|     Mr. Null|  NULL| 20|2006-01-01|             NULL|86.425|
++-------------+------+---+----------+-----------------+------+
+
++-------------+--------------------+---+----------+-----------------+-----+
+|         name|              gender|age|  birthday|used_as_character|score|
++-------------+--------------------+---+----------+-----------------+-----+
+|      Oh-LoRA|              female| 22|2003-10-11|             true| 85.5|
+|     An Yujin|              female| 22|2003-09-01|            false| 90.1|
+|Jang Wonyoung|              female| 21|2004-08-31|             true| 83.1|
+|   Kim Minjae|                male| 30|1996-08-08|             true| 84.0|
+|    Lee Minsu|                male| 25|2001-08-08|            false| 78.0|
+|         Gini|              female| 22|2004-02-03|            false| 99.9|
+|        Genie|                male| 40|1986-08-08|            false| 90.0|
+|    Namoo Kim|                male| 35|1991-08-08|            false| 80.8|
+|         NULL|                male| 37|1989-01-01|             true| NULL|
+|     Mr. Null|no gender info pr...| 20|2006-01-01|             NULL| NULL|
++-------------+--------------------+---+----------+-----------------+-----+
+```
 
 ## 참고 자료
 
