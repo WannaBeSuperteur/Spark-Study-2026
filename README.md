@@ -21,7 +21,7 @@
 | **08.03 월 + 08.08 토 (2d)** | **1. Spark 동작 원리 / 핵심 개념**                                         | 💨       |
 | 08.03 월 + 08.08 토 (2d)     | - 1-1. Spark 클러스터 아키텍처                                             | ✅        |
 | 08.08 토 (1d)               | - 1-2. RDD vs DataFrame vs Dataset                                 | ✅        |
-| 08.08 토 (1d)               | - 1-3. 지연 연산(Lazy Evaluation)과 DAG                                 | ⬜        |
+| 08.08 토 (1d)               | - 1-3. 지연 연산(Lazy Evaluation)과 DAG                                 | 💨       |
 | **08.08 토 (1d)**           | **2. DataFrame 기본 변환 및 처리**                                        | ⬜        |
 | 08.08 토 (1d)               | - 2-1. 명시적 스키마(Schema) 정의 및 파일 I/O                                 | ⬜        |
 | 08.08 토 (1d)               | - 2-2. 핵심 Transformation & Action 연산                               | ⬜        |
