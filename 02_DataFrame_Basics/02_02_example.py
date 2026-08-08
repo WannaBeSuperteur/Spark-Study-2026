@@ -118,3 +118,14 @@ if __name__ == '__main__':
     new_df = df.withColumn("exact_age",
                            round(months_between(current_date(), col("birthday")) / 12, 1))
     new_df.show()
+
+    print('==== 5. column 삭제하기 ====')
+
+    # 5-1. 특정 컬럼 삭제
+    print("5-1. 특정 컬럼 삭제")
+    df.drop("birthday").show()
+
+    # 5-2. 한번에 여러 컬럼 삭제
+    print("5-2. 한번에 여러 컬럼 삭제")
+    df.drop("birthday", "used_as_character").show()
+

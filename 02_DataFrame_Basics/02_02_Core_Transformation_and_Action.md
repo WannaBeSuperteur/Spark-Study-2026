@@ -5,7 +5,7 @@
 * [2. 특정 컬럼의 데이터 추출, 정렬하기 ```select()``` ```filter()``` ```where()``` ```orderBy()```](#2-특정-컬럼의-데이터-추출-정렬하기-select-filter-orderby)
 * [3. 데이터 그룹핑하기 ```groupBy()``` ```agg()```](#3-데이터-그룹핑하기-groupby-agg)
 * [4. 컬럼 데이터 변환하기 ```withColumn()```](#4-컬럼-데이터-변환하기-withcolumn)
-* [5. row, column 삭제하기 ```drop()```](#5-row-column-삭제하기-drop)
+* [5. column 삭제하기 ```drop()```](#5-column-삭제하기-drop)
 * [6. 결측치 row 찾고 대체하기 ```isNull()``` ```fillna()```](#6-결측치-row-찾고-대체하기-isnull-fillna)
 
 ## 1. 데이터셋 정보 보기 ```show()``` ```limit()``` ```head()``` ```count()```
@@ -522,7 +522,66 @@ new_df.show()
 +-------------+------+---+----------+-----------------+-----+---------+
 ```
 
-## 5. row, column 삭제하기 ```drop()```
+## 5. column 삭제하기 ```drop()```
+
+**5-1. 1개의 컬럼 삭제하기**
+
+* 예제 코드
+
+```python
+# 5-1. 특정 컬럼 삭제
+print("5-1. 특정 컬럼 삭제")
+df.drop("birthday").show()
+```
+
+* 실행 결과
+
+```
+5-1. 특정 컬럼 삭제
++-------------+------+---+-----------------+-----+
+|         name|gender|age|used_as_character|score|
++-------------+------+---+-----------------+-----+
+|      Oh-LoRA|female| 22|             true| 85.5|
+|     An Yujin|female| 22|            false| 90.1|
+|Jang Wonyoung|female| 21|             true| 83.1|
+|   Kim Minjae|  male| 30|             true| 84.0|
+|    Lee Minsu|  male| 25|            false| 78.0|
+|         Gini|female| 22|            false| 99.9|
+|        Genie|  male| 40|            false| 90.0|
+|    Namoo Kim|  male| 35|            false| 80.8|
+|         NULL|  male| 37|             true| NULL|
+|     Mr. Null|  NULL| 20|             NULL| NULL|
++-------------+------+---+-----------------+-----+
+```
+
+**5-2. 여러 개의 컬럼 삭제하기**
+
+* 예제 코드
+
+```python
+# 5-2. 한번에 여러 컬럼 삭제
+print("5-2. 한번에 여러 컬럼 삭제")
+df.drop("birthday", "used_as_character").show()
+```
+
+* 실행 결과
+
+```
++-------------+------+---+-----+
+|         name|gender|age|score|
++-------------+------+---+-----+
+|      Oh-LoRA|female| 22| 85.5|
+|     An Yujin|female| 22| 90.1|
+|Jang Wonyoung|female| 21| 83.1|
+|   Kim Minjae|  male| 30| 84.0|
+|    Lee Minsu|  male| 25| 78.0|
+|         Gini|female| 22| 99.9|
+|        Genie|  male| 40| 90.0|
+|    Namoo Kim|  male| 35| 80.8|
+|         NULL|  male| 37| NULL|
+|     Mr. Null|  NULL| 20| NULL|
++-------------+------+---+-----+
+```
 
 ## 6. 결측치 row 찾고 대체하기 ```isNull()``` ```fillna()```
 
