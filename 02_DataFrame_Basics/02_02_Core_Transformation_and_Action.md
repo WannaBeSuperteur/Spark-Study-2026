@@ -7,6 +7,7 @@
 * [4. 컬럼 데이터 변환하기 ```withColumn()```](#4-컬럼-데이터-변환하기-withcolumn)
 * [5. column 삭제하기 ```drop()```](#5-column-삭제하기-drop)
 * [6. 결측치 row 찾고 대체하기 ```isNull()``` ```fillna()```](#6-결측치-row-찾고-대체하기-isnull-fillna)
+* [7. 조건 분기 (```when()```)](#7-조건-분기-when)
 
 ## 1. 데이터셋 정보 보기 ```show()``` ```limit()``` ```head()``` ```count()```
 
@@ -662,6 +663,39 @@ avg_score : 86.425
 |         NULL|                male| 37|1989-01-01|             true| NULL|
 |     Mr. Null|no gender info pr...| 20|2006-01-01|             NULL| NULL|
 +-------------+--------------------+---+----------+-----------------+-----+
+```
+
+## 7. 조건 분기 (```when()```)
+
+* ```when()``` 함수는 다음과 같이 사용한다.
+  * ```when(조건, 참일때 값).otherwise(거짓일때 값)``` 
+* 예제 코드
+
+```python
+new_df = df.withColumn("status",
+                       when(col("score") >= 80, "PASS")
+                       .otherwise("FAIL"))
+new_df.show()
+```
+
+* 실행 결과
+
+```
+==== 7. 조건 분기 ====
++-------------+------+---+----------+-----------------+-----+------+
+|         name|gender|age|  birthday|used_as_character|score|status|
++-------------+------+---+----------+-----------------+-----+------+
+|      Oh-LoRA|female| 22|2003-10-11|             true| 85.5|  PASS|
+|     An Yujin|female| 22|2003-09-01|            false| 90.1|  PASS|
+|Jang Wonyoung|female| 21|2004-08-31|             true| 83.1|  PASS|
+|   Kim Minjae|  male| 30|1996-08-08|             true| 84.0|  PASS|
+|    Lee Minsu|  male| 25|2001-08-08|            false| 78.0|  FAIL|
+|         Gini|female| 22|2004-02-03|            false| 99.9|  PASS|
+|        Genie|  male| 40|1986-08-08|            false| 90.0|  PASS|
+|    Namoo Kim|  male| 35|1991-08-08|            false| 80.8|  PASS|
+|         NULL|  male| 37|1989-01-01|             true| NULL|  FAIL|
+|     Mr. Null|  NULL| 20|2006-01-01|             NULL| NULL|  FAIL|
++-------------+------+---+----------+-----------------+-----+------+
 ```
 
 ## 참고 자료

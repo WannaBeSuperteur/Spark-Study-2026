@@ -3,7 +3,7 @@ import os
 import sys
 
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import col, concat, floor, lit, current_date, months_between, round, isnan
+from pyspark.sql.functions import col, concat, floor, lit, current_date, months_between, round, when
 from pyspark.sql import functions as F
 
 os.environ["PYSPARK_PYTHON"] = sys.executable
@@ -142,3 +142,10 @@ if __name__ == '__main__':
     print(f"avg_score : {avg_score}")
     df.fillna(value=avg_score, subset="score").show()
     df.na.fill(value="no gender info provided", subset=["gender"]).show()
+
+    print('==== 7. 조건 분기 ====')
+
+    new_df = df.withColumn("status",
+                           when(col("score") >= 80, "PASS")
+                           .otherwise("FAIL"))
+    new_df.show()
