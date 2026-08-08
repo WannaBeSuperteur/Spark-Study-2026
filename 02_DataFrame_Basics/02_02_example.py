@@ -4,6 +4,7 @@ import sys
 
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import col
+from pyspark.sql import functions as F
 
 os.environ["PYSPARK_PYTHON"] = sys.executable
 os.environ["PYSPARK_DRIVER_PYTHON"] = sys.executable
@@ -78,3 +79,27 @@ if __name__ == '__main__':
     df.orderBy(col("Age"), ascending=False).show()
     df.orderBy(col("Age").desc()).show()
     df.orderBy(col("Age"), col("name").desc()).show()
+
+    print("==== 3. 데이터 그룹핑하기 ====")
+
+    # 3-1. 특정 컬럼을 기준으로 그룹핑하고, 최대/최소/평균 집계하기
+    print("3-1. 특정 컬럼을 기준으로 그룹핑하고, 최대/최소/평균 집계하기")
+    df.groupBy("gender").max("score").show()
+    df.groupBy("gender").min("score").show()
+    df.groupBy("gender").avg("score").show()
+    df.groupBy("gender", "used_as_character").max("score").show()
+    df.groupBy(["gender", "used_as_character"]).max("score").show()
+
+    # 3-2. 특정 컬럼을 기준으로 그룹핑하고, 여러 개의 정보 집계하기
+    print("3-2. 특정 컬럼을 기준으로 그룹핑하고, 여러 개의 정보 집계하기")
+    df.groupBy(col("gender")) \
+        .agg(F.max("score").alias("max_score"),
+             F.min("score").alias("min_score"),
+             F.avg("score").alias("avg_score")) \
+        .show()
+
+    df.groupBy(col("gender"), col("used_as_character")) \
+        .agg(F.max("score").alias("max_score"),
+             F.min("score").alias("min_score"),
+             F.avg("score").alias("avg_score")) \
+        .show()

@@ -334,6 +334,112 @@ df.orderBy(col("Age"), col("name").desc()).show()
 
 ## 3. 데이터 그룹핑하기 ```groupBy()``` ```agg()```
 
+**3-1. ```groupBy()``` 함수로 특정 컬럼을 기준으로 그룹핑하고, 최대/최소/평균 집계하기**
+
+* 예제 코드
+
+```python
+# 3-1. 특정 컬럼을 기준으로 그룹핑하고, 최대/최소/평균 집계하기
+print("3-1. 특정 컬럼을 기준으로 그룹핑하고, 최대/최소/평균 집계하기")
+df.groupBy("gender").max("score").show()
+df.groupBy("gender").min("score").show()
+df.groupBy("gender").avg("score").show()
+df.groupBy("gender", "used_as_character").max("score").show()
+df.groupBy(["gender", "used_as_character"]).max("score").show()
+```
+
+* 코드 실행 결과
+
+```
+3-1. 특정 컬럼을 기준으로 그룹핑하고, 최대/최소/평균 집계하기
++------+----------+
+|gender|max(score)|
++------+----------+
+|  NULL|      NULL|
+|female|      99.9|
+|  male|      90.0|
++------+----------+
+
++------+----------+
+|gender|min(score)|
++------+----------+
+|  NULL|      NULL|
+|female|      83.1|
+|  male|      78.0|
++------+----------+
+
++------+----------+
+|gender|avg(score)|
++------+----------+
+|  NULL|      NULL|
+|female|     89.65|
+|  male|      83.2|
++------+----------+
+
++------+-----------------+----------+
+|gender|used_as_character|max(score)|
++------+-----------------+----------+
+|  NULL|             NULL|      NULL|
+|  male|            false|      90.0|
+|female|             true|      85.5|
+|female|            false|      99.9|
+|  male|             true|      84.0|
++------+-----------------+----------+
+
++------+-----------------+----------+
+|gender|used_as_character|max(score)|
++------+-----------------+----------+
+|  NULL|             NULL|      NULL|
+|  male|            false|      90.0|
+|female|             true|      85.5|
+|female|            false|      99.9|
+|  male|             true|      84.0|
++------+-----------------+----------+
+```
+
+**3-2. ```groupBy()``` 함수로 특정 컬럼을 기준으로 그룹핑하고, ```agg()``` 함수로 여러 개의 정보 집계하기**
+
+* 예제 코드
+
+```python
+# 3-2. 특정 컬럼을 기준으로 그룹핑하고, 여러 개의 정보 집계하기
+print("3-2. 특정 컬럼을 기준으로 그룹핑하고, 여러 개의 정보 집계하기")
+df.groupBy(col("gender")) \
+    .agg(F.max("score").alias("max_score"),
+         F.min("score").alias("min_score"),
+         F.avg("score").alias("avg_score")) \
+    .show()
+
+df.groupBy(col("gender"), col("used_as_character")) \
+    .agg(F.max("score").alias("max_score"),
+         F.min("score").alias("min_score"),
+         F.avg("score").alias("avg_score")) \
+    .show()
+```
+
+* 코드 실행 결과
+
+```
+3-2. 특정 컬럼을 기준으로 그룹핑하고, 여러 개의 정보 집계하기
++------+---------+---------+---------+
+|gender|max_score|min_score|avg_score|
++------+---------+---------+---------+
+|  NULL|     NULL|     NULL|     NULL|
+|female|     99.9|     83.1|    89.65|
+|  male|     90.0|     78.0|     83.2|
++------+---------+---------+---------+
+
++------+-----------------+---------+---------+-----------------+
+|gender|used_as_character|max_score|min_score|        avg_score|
++------+-----------------+---------+---------+-----------------+
+|  NULL|             NULL|     NULL|     NULL|             NULL|
+|  male|            false|     90.0|     78.0|82.93333333333334|
+|female|             true|     85.5|     83.1|             84.3|
+|female|            false|     99.9|     90.1|             95.0|
+|  male|             true|     84.0|     84.0|             84.0|
++------+-----------------+---------+---------+-----------------+
+```
+
 ## 4. 컬럼 데이터 변환하기 ```withColumn()```
 
 ## 5. row, column 삭제하기 ```drop()```
