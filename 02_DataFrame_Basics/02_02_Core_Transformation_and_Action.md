@@ -442,6 +442,86 @@ df.groupBy(col("gender"), col("used_as_character")) \
 
 ## 4. 컬럼 데이터 변환하기 ```withColumn()```
 
+**4-1. 나이대 구하기 (```floor```, ```cast```, ```concat```, ```lit``` 함수 이용)**
+
+* 예제 코드
+
+```python
+print("4-1. 나이대 구하기 (floor, cast, concat, lit 함수 이용)")
+new_df = df.select("*")  # 대규모 데이터에서는 필요한 컬럼만 선택하는 것이 권장됨
+new_df = new_df.withColumn("age_group",
+                           concat((floor(col("age") / 10) * 10).cast("integer"), lit("대")))
+new_df.show()
+```
+
+* 함수 설명
+
+| 함수           | 설명                                                   |
+|--------------|------------------------------------------------------|
+| ```floor```  | 실수를 내림하여 정수 반환                                       |
+| ```cast```   | ```value.cast(type)``` 형식으로 해당 값을 ```type``` 형식으로 변환 |
+| ```concat``` | ```concat(a, b)``` 형식으로 a와 b를 그대로 연결 (concatenate)   |
+| ```lit```    | 다른 언어의 data type을 **Spark data type 에 맞게 변환**        |
+
+* 코드 실행 결과
+
+```
+4-1. 나이대 구하기 (floor, cast, concat, lit 함수 이용)
++-------------+------+---+----------+-----------------+-----+---------+
+|         name|gender|age|  birthday|used_as_character|score|age_group|
++-------------+------+---+----------+-----------------+-----+---------+
+|      Oh-LoRA|female| 22|2003-10-11|             true| 85.5|     20대|
+|     An Yujin|female| 22|2003-09-01|            false| 90.1|     20대|
+|Jang Wonyoung|female| 21|2004-08-31|             true| 83.1|     20대|
+|   Kim Minjae|  male| 30|1996-08-08|             true| 84.0|     30대|
+|    Lee Minsu|  male| 25|2001-08-08|            false| 78.0|     20대|
+|         Gini|female| 22|2004-02-03|            false| 99.9|     20대|
+|        Genie|  male| 40|1986-08-08|            false| 90.0|     40대|
+|    Namoo Kim|  male| 35|1991-08-08|            false| 80.8|     30대|
+|         NULL|  male| 37|1989-01-01|             true| NULL|     30대|
+|     Mr. Null|  NULL| 20|2006-01-01|             NULL| NULL|     20대|
++-------------+------+---+----------+-----------------+-----+---------+
+```
+
+**4-2. 정확한 나이 구하기 (```current_date```, ```months_between``` 함수 이용)**
+
+* 예제 코드
+
+```python
+# 4-2. 정확한 나이 구하기 (current_date, months_between 함수 이용)
+print("4-2. 정확한 나이 구하기 (current_date, months_between 함수 이용)")
+new_df = df.withColumn("exact_age",
+                        round(months_between(current_date(), col("birthday")) / 12, 1))
+new_df.show()
+```
+
+* 함수 설명
+
+| 함수                   | 설명                                                                                 |
+|----------------------|------------------------------------------------------------------------------------|
+| ```current_date```   | 오늘 날짜 반환                                                                           |
+| ```months_between``` | ```months_between(date1, date2)``` 로 ```date1 - date2``` 의 **정확한 달 수 (months)** 반환 |
+
+* 코드 실행 결과
+
+```
+4-2. 정확한 나이 구하기 (current_date, months_between 함수 이용)
++-------------+------+---+----------+-----------------+-----+---------+
+|         name|gender|age|  birthday|used_as_character|score|exact_age|
++-------------+------+---+----------+-----------------+-----+---------+
+|      Oh-LoRA|female| 22|2003-10-11|             true| 85.5|     22.8|
+|     An Yujin|female| 22|2003-09-01|            false| 90.1|     22.9|
+|Jang Wonyoung|female| 21|2004-08-31|             true| 83.1|     21.9|
+|   Kim Minjae|  male| 30|1996-08-08|             true| 84.0|     30.0|
+|    Lee Minsu|  male| 25|2001-08-08|            false| 78.0|     25.0|
+|         Gini|female| 22|2004-02-03|            false| 99.9|     22.5|
+|        Genie|  male| 40|1986-08-08|            false| 90.0|     40.0|
+|    Namoo Kim|  male| 35|1991-08-08|            false| 80.8|     35.0|
+|         NULL|  male| 37|1989-01-01|             true| NULL|     37.6|
+|     Mr. Null|  NULL| 20|2006-01-01|             NULL| NULL|     20.6|
++-------------+------+---+----------+-----------------+-----+---------+
+```
+
 ## 5. row, column 삭제하기 ```drop()```
 
 ## 6. 결측치 row 찾고 대체하기 ```isNull()``` ```fillna()```

@@ -3,7 +3,7 @@ import os
 import sys
 
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import col
+from pyspark.sql.functions import col, concat, floor, lit, current_date, months_between, round
 from pyspark.sql import functions as F
 
 os.environ["PYSPARK_PYTHON"] = sys.executable
@@ -103,3 +103,18 @@ if __name__ == '__main__':
              F.min("score").alias("min_score"),
              F.avg("score").alias("avg_score")) \
         .show()
+
+    print('==== 4. 특정 컬럼의 값 변환하기 ====')
+
+    # 4-1. 나이대 구하기 (floor, cast, concat, lit 함수 이용)
+    print("4-1. 나이대 구하기 (floor, cast, concat, lit 함수 이용)")
+    new_df = df.select("*")  # 대규모 데이터에서는 필요한 컬럼만 선택하는 것이 권장됨
+    new_df = new_df.withColumn("age_group",
+                               concat((floor(col("age") / 10) * 10).cast("integer"), lit("대")))
+    new_df.show()
+
+    # 4-2. 정확한 나이 구하기 (current_date, months_between 함수 이용)
+    print("4-2. 정확한 나이 구하기 (current_date, months_between 함수 이용)")
+    new_df = df.withColumn("exact_age",
+                           round(months_between(current_date(), col("birthday")) / 12, 1))
+    new_df.show()
