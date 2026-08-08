@@ -25,9 +25,9 @@
 | **08.08 토 (1d)**           | **2. DataFrame 기본 변환 및 처리**                                        | ✅        |
 | 08.08 토 (1d)               | - 2-1. 명시적 스키마(Schema) 정의 및 파일 I/O                                 | ✅        |
 | 08.08 토 (1d)               | - 2-2. 핵심 Transformation & Action 연산                               | ✅        |
-| 08.08 토 (1d)               | - 2-3. Spark Built-in 함수 vs PySpark UDF (User Defined Function)    | 💨       |
-| **08.08 토 - 08.09 일 (2d)** | **3. 파일 및 저장 최적화**                                                 | ⬜        |
-| 08.08 토 (1d)               | - 3-1. 대용량 파일 포맷 및 압축 (Parquet, ORC, Snappy)                       | ⬜        |
+| 08.08 토 (1d)               | - 2-3. Spark Built-in 함수 vs PySpark UDF (User Defined Function)    | ✅        |
+| **08.09 일 (1d)**           | **3. 파일 및 저장 최적화**                                                 | ⬜        |
+| 08.09 일 (1d)               | - 3-1. 대용량 파일 포맷 및 압축 (Parquet, ORC, Snappy)                       | ⬜        |
 | 08.09 일 (1d)               | - 3-2. 파티셔닝(Partitioning) & 버케팅(Bucketing)                         | ⬜        |
 | **08.09 일 - 08.12 수 (4d)** | **4. 메모리 관리 및 성능 튜닝**                                              | ⬜        |
 | 08.09 일 (1d)               | - 4-1. 파티션 제어와 셔플링(Shuffling): ```repartition``` vs ```coalesce``` | ⬜        |
