@@ -62,7 +62,45 @@ UDF 대신 사용할 수 있는 Spark의 내장 함수는 다음과 같다.
 
 ### 2-2. Pandas UDF 및 그 사용법
 
+Pandas UDF 는 **실행할 함수에 ```@pandas_udf(OOOType())``` 를 적용** 하여 호출한다.
+
+* Pandas UDF는 **batch 단위로 처리** 하므로, **대용량 데이터 (수십만 row 이상)** 의 경우 **최대 100배의 속도 향상** 이 있다.
+
+```python
+@pandas_udf(DoubleType())
+def pandas_udf_function(series: pd.Series) -> pd.Series:
+    x = (series - 40.0) / 10.0
+    for _ in range(20):
+        x = np.sin(x) + np.cos(x * 2) + np.tan(x * 3)
+    return x
+
+...
+
+@time_checker
+def run_with_pandas_udf(df):
+    new_df = df.withColumn("converted_score", pandas_udf_function("score"))
+    new_df.select(F.sum("converted_score")).collect()  # action 호출 -> 실제 연산 시간 측정 가능
+```
+
+* 속도 비교 결과
+
+```
+ === 함수: run_with_python_udf ===
+마지막 50 회 평균: 10.575442625989671, 표준편차: 2.293753841072866, 95% 신뢰구간: [9.9396, 11.2112]
+
+ === 함수: run_with_pandas_udf ===
+마지막 50 회 평균: 5.805304092003499, 표준편차: 1.5115407414051387, 95% 신뢰구간: [5.3863, 6.2243]
+```
+
 ## 3. 실무에서의 안티패턴 3가지
+
+UDF를 실무에서 사용할 때의 주요 안티패턴은 다음과 같다.
+
+* **매 행마다 DB 연결을 새로 생성** 하는 경우
+  * 속도 극히 저하 및 연결 고갈 우려
+* null 처리 누락
+* UDF 사용 결과를 **다시 UDF 입력으로 사용** (체이닝)
+  * 이 경우 **단일 Pandas UDF 또는 Arrow UDF** 로 통합하는 것이 좋다.
 
 ## 참고
 
