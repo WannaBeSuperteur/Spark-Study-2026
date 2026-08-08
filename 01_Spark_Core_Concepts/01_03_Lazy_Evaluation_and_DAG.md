@@ -40,6 +40,14 @@
 * 그래프 알고리즘에서의 DAG과 같이 **단일 방향성으로 루프가 없는 형태의 그래프** 이다.
 * Action 이 호출될 때 **DAG 최적화 → DAG 실행** 이 이루어진다.
 
+DAG의 스케줄링 과정은 다음과 같다.
+
+* RDD의 생성 순서 (Lineage, DAG 형태) 가 있음
+* 이 **논리적 실행 계획 (RDD Lineage)** 을 실제 **물리적 실행 계획 (using sategs)** 으로 변환
+  * 여러 개의 stage 생성 (```Transformation``` 기반)
+  * **Narrow Transformation** 은 **Pipelined (단일 stage로 그룹화)** 된다.
+  * 상호 의존적이지 않은 stage는 병렬, 상호 의존적인 stage는 **이전 단계 완료 후** 실행된다.
+
 ## 참고 자료
 
 * [Spark 이해하기(RDD, DAG, Lazy Evaluation) - devvon](https://pickwon.tistory.com/93)
