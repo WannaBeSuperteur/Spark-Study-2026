@@ -11,7 +11,7 @@
 
 ## 1. 파티션 제어와 셔플링 개요
 
-* **Partition (파티션)** 은 RDD 또는 Dataset을 구성하는 **가장 작은 단위의 객체** 이ㅏㄷ.
+* **Partition (파티션)** 은 RDD 또는 Dataset을 구성하는 **가장 작은 단위의 객체** 이다.
   * NOTE: ```1 Core = 1 Task = 1 Partition``` 
 * **Partitioning (파티셔닝)** 은 데이터를 **여러 cluster node로 분할** 하는 메커니즘이다.
 * 다음과 같은 관계 때문에, **Partition 크기 조절이 Spark 성능 및 메모리 점유량에 큰 영향** 을 미친다.
