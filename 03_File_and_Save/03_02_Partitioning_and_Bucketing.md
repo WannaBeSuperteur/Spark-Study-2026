@@ -37,6 +37,27 @@
 
 * Partitioning 을 위해서는 ```DataFrameWriter``` 의 ```partitionBy``` 함수를 사용한다.
   * 이때, Partition Key는 **cardinality (가능한 값의 개수) 가 작은 것** 을 선택하는 것이 좋다. (많은 파일 생성 방지를 위해)
+* [Python 실습 코드](03_02_example.py)
+
+```python
+def partitioning_example(df, spark):
+    output_dir = "03_02_partitioning_example/output"
+
+    # partition 데이터 쓰기
+    df_with_partition = (df
+                         .withColumn("id_digit_2", F.substring(F.col("id"), 6, 1))
+                         .withColumn("id_digit_1", F.substring(F.col("id"), 7, 1)))
+    df_with_partition.limit(20).show()
+
+    (df_with_partition.write
+        .mode("overwrite")
+        .partitionBy("id_digit_2", "id_digit_1")
+        .parquet(output_dir))
+
+    # partition 된 데이터 읽기
+    df = spark.read.parquet(os.path.join(output_dir, "id_digit_2=1", "id_digit_1=2"))
+    df.limit(20).show()
+```
 
 ## 3. Bucketing
 
