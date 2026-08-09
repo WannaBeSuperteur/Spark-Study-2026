@@ -1,6 +1,7 @@
 
 import os
 import sys
+import shutil
 
 from pyspark.sql import SparkSession
 from pyspark.sql import functions as F
@@ -24,6 +25,7 @@ def partitioning_example(df, spark):
     output_dir = "03_02_partitioning_example/output"
 
     # partition 데이터 쓰기
+    print('write ...')
     df_with_partition = (df
                          .withColumn("id_digit_2", F.substring(F.col("id"), 6, 1))
                          .withColumn("id_digit_1", F.substring(F.col("id"), 7, 1)))
@@ -35,12 +37,38 @@ def partitioning_example(df, spark):
         .parquet(output_dir))
 
     # partition 된 데이터 읽기
+    print('read ...')
     df = spark.read.parquet(os.path.join(output_dir, "id_digit_2=1", "id_digit_1=2"))
     df.limit(20).show()
 
 
 def bucketing_example(df, spark):
-    pass
+    table_name = "03_02_bucketing_example"
+    prime_number = 17
+
+    # 기존 테이블 및 warehouse 제거
+    spark.sql(f"DROP TABLE IF EXISTS {table_name}")
+
+    warehouse_dir = f'spark-warehouse/{table_name}'
+    if os.path.exists(warehouse_dir):
+        shutil.rmtree(warehouse_dir)
+
+    # bucket 데이터 쓰기
+    print('write ...')
+    df_with_id_column = (df
+                         .withColumn("id_column", F.substring(F.col("id"), 2, 6)))
+    df_with_id_column.limit(20).show()
+
+    (df_with_id_column.write
+        .mode("overwrite")
+        .bucketBy(prime_number, "id_column")
+        .saveAsTable(table_name))
+
+    # bucket 된 데이터 읽기
+    print('read ...')
+    df = spark.read.table(table_name)
+    df = df.withColumn("mod", F.col("id_column").cast("integer") % prime_number)
+    df.limit(20).show()
 
 
 if __name__ == '__main__':
