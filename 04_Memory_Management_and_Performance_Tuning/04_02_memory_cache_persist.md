@@ -46,9 +46,96 @@
 
 * [실험 코드](04_02_example.py)
 
+```python
+def run_common_action(df):
+    df = df.withColumn("pass_or_fail",
+                       F.when(F.col("score") >= 80, "pass").otherwise("fail"))
+    df = df.filter(df["pass_or_fail"] == "pass")
+    print(f'passed count: {df.count()}')
+
+
+@time_checker
+def run_without_caching(df):
+    run_common_action(df)
+
+
+@time_checker
+def run_with_cache(df):
+    run_common_action(df)
+
+
+@time_checker
+def run_with_persist(df):
+    run_common_action(df)
+```
+
+```python
+if __name__ == '__main__':
+    spark = SparkSession.builder.appName("04_02_example").getOrCreate()
+    df_path = os.path.join(parent_dir, "02_DataFrame_Basics", "02_03_example_2.csv")
+
+    # 1. Run without caching
+
+    print('==== run WITHOUT CACHING ====')
+    for _ in range(TOTAL_TESTS):
+        df_uncached = spark.read.csv(df_path, header=True, inferSchema=True)
+        run_without_caching(df_uncached)
+
+    # 2. Run with caching (cache)
+
+    print('==== run with CACHE ====')
+    df_cached = spark.read.csv(df_path, header=True, inferSchema=True).cache()
+    df_cached.count()  # cold start (메모리에 캐시 적재)
+    for _ in range(TOTAL_TESTS):
+        run_with_cache(df_cached)
+    df_cached.unpersist()
+
+    # 3. Run with persist (with MEMORY_AND_DISK Storage Level)
+
+    print('==== run with PERSIST ====')
+    df_persist = (spark.read.csv(df_path, header=True, inferSchema=True)
+                  .persist(StorageLevel.MEMORY_AND_DISK))
+    df_persist.count()  # cold start (메모리에 캐시 적재)
+    for _ in range(TOTAL_TESTS):
+        run_with_persist(df_persist)
+    df_persist.unpersist()
+
+    # 4. Aggregate & Show Test Result
+
+    for func_name in ['run_without_caching', 'run_with_cache', 'run_with_persist']:
+        print(f'\n === 함수: {func_name} ===')
+        valid_stats = ELAPSED_TIMES[func_name][-VALID_TESTS:]
+
+        valid_mean = statistics.mean(valid_stats)
+        valid_std = statistics.stdev(valid_stats)
+        valid_95pct_min = round(valid_mean - 1.96 * valid_std / math.sqrt(VALID_TESTS), 4)
+        valid_95pct_max = round(valid_mean + 1.96 * valid_std / math.sqrt(VALID_TESTS), 4)
+        valid_95pct = f'[{valid_95pct_min}, {valid_95pct_max}]'
+
+        print(f'마지막 {VALID_TESTS} 회 평균: {valid_mean}, 표준편차: {valid_std}, 95% 신뢰구간: {valid_95pct}')
+```
+
 * 코드 실행 결과
 
+```
+ === 함수: run_without_caching ===
+마지막 200 회 평균: 0.39458962200093084, 표준편차: 0.04548085595366969, 95% 신뢰구간: [0.3883, 0.4009]
+
+ === 함수: run_with_cache ===
+마지막 200 회 평균: 0.09506691150250844, 표준편차: 0.02158726533368292, 95% 신뢰구간: [0.0921, 0.0981]
+
+ === 함수: run_with_persist ===
+마지막 200 회 평균: 0.09644972299807705, 표준편차: 0.01962772309825337, 95% 신뢰구간: [0.0937, 0.0992]
+```
+
 * 속도 실험 비교 (caching 없음 vs. ```cache()``` vs. ```persist()```)
+  * 총 200 회 기준
+
+| 구분               | caching "없음"     | "cache" 방식으로 캐싱  | "persist" 방식으로 캐싱 |
+|------------------|------------------|------------------|-------------------|
+| 평균 시간 (초)        | **0.3946**       | **0.0951**       | **0.0964**        |
+| 표준편차 (초)         | 0.0455           | 0.0216           | 0.0196            |
+| 평균의 95% 신뢰구간 (초) | [0.3883, 0.4009] | [0.0921, 0.0981] | [0.0937, 0.0992]  |
 
 ## 참고 자료
 

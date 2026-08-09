@@ -10,6 +10,7 @@ import math
 import os
 import sys
 
+from pyspark import StorageLevel
 from pyspark.sql import SparkSession
 from pyspark.sql import functions as F
 
@@ -25,8 +26,8 @@ print(f'current_file_path: {current_file_path}')
 print(f'parent_dir: {parent_dir}')
 
 ELAPSED_TIMES = defaultdict(list[float])
-TOTAL_TESTS = 70
-VALID_TESTS = 50
+TOTAL_TESTS = 300
+VALID_TESTS = 200
 
 
 def time_checker(func):
@@ -65,22 +66,34 @@ def run_with_persist(df):
 if __name__ == '__main__':
     spark = SparkSession.builder.appName("04_02_example").getOrCreate()
     df_path = os.path.join(parent_dir, "02_DataFrame_Basics", "02_03_example_2.csv")
-    df = spark.read.csv(df_path, header=True, inferSchema=True)
-    df_cached = df.cache()
-    df_persist = df.persist()
 
+    # 1. Run without caching
+
+    print('==== run WITHOUT CACHING ====')
     for _ in range(TOTAL_TESTS):
-        print('==== run WITHOUT CACHING ====')
-        run_without_caching(df)
+        df_uncached = spark.read.csv(df_path, header=True, inferSchema=True)
+        run_without_caching(df_uncached)
 
-        print('==== run with CACHE ====')
+    # 2. Run with caching (cache)
+
+    print('==== run with CACHE ====')
+    df_cached = spark.read.csv(df_path, header=True, inferSchema=True).cache()
+    df_cached.count()  # cold start (메모리에 캐시 적재)
+    for _ in range(TOTAL_TESTS):
         run_with_cache(df_cached)
-
-        print('==== run with PERSIST ====')
-        run_with_persist(df_persist)
-
     df_cached.unpersist()
+
+    # 3. Run with persist (with MEMORY_AND_DISK Storage Level)
+
+    print('==== run with PERSIST ====')
+    df_persist = (spark.read.csv(df_path, header=True, inferSchema=True)
+                  .persist(StorageLevel.MEMORY_AND_DISK))
+    df_persist.count()  # cold start (메모리에 캐시 적재)
+    for _ in range(TOTAL_TESTS):
+        run_with_persist(df_persist)
     df_persist.unpersist()
+
+    # 4. Aggregate & Show Test Result
 
     for func_name in ['run_without_caching', 'run_with_cache', 'run_with_persist']:
         print(f'\n === 함수: {func_name} ===')
