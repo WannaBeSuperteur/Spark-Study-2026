@@ -7,3 +7,7 @@ hadoop/*
 03_File_and_Save/spark-warehouse/*
 03_File_and_Save/03_02_partitioning_example
 03_File_and_Save/03_02_partitioning_example/*
+04_Memory_Management_and_Performance_Tuning/04_01_coalesce_example
+04_Memory_Management_and_Performance_Tuning/04_01_coalesce_example/*
+04_Memory_Management_and_Performance_Tuning/04_01_repartition_example
+04_Memory_Management_and_Performance_Tuning/04_01_repartition_example/*
