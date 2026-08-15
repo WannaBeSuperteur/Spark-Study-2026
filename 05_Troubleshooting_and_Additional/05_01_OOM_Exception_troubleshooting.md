@@ -15,6 +15,6 @@
 
 ## 참고 자료
 
-* [[Spark] 메모리 관리 - 불곰](https://brownbears.tistory.com/749)
+* [What is OOM (Out of Memory)? - Jnanaranjan pradhan (LinkedIn)](https://www.linkedin.com/posts/jnanaranjanpradhan_what-is-oom-out-of-memory-out-of-memory-share-7324039571321565185-Pelh/)
 * [spark memoryOverhead 설정에 대한 이해 - Jason Heo's Blog](https://jason-heo.github.io/bigdata/2020/10/24/understanding-spark-memoryoverhead-conf.html)
 * [[Apache Spark] 아파치 스파크의 메모리 관리에 대해서 - Log level](https://firststep-de.tistory.com/49#%EC%98%A8%ED%9E%99%20%EB%A9%94%EB%AA%A8%EB%A6%AC%20(On-Heap%20Memory)%F0%9F%92%8E-1)
