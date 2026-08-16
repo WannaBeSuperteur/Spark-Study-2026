@@ -47,6 +47,7 @@ def create_object_test(spark):
     print('== 5 ==')
     ps_df.sort_values(by='score')
     print(ps_df)
+    print(ps_df.sort_values(by='score'))
 
 
 def missing_data_test():
