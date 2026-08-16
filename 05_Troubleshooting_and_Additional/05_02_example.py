@@ -45,7 +45,7 @@ def create_object_test(spark):
 
     # 5. 정렬
     print('== 5 ==')
-    ps_df.sort_index(ascending=False)
+    ps_df.sort_values(by='score')
     print(ps_df)
 
 
@@ -76,16 +76,18 @@ def grouping_test():
     print('== 1 ==')
     pandas_df = pd.DataFrame(df_dict)
     ps_df = ps.from_pandas(pandas_df)
+    ps_df_drop_name = ps_df.drop(columns=["name"])
+    ps_df_drop_name_gender = ps_df.drop(columns=["name", "gender"])
 
     print('== 2 ==')
-    print(ps_df.groupby('real').sum())
-    print(ps_df.groupby('real').max())
-    print(ps_df.groupby('real').mean())
+    print(ps_df_drop_name_gender.groupby('real').sum())
+    print(ps_df_drop_name_gender.groupby('real').max())
+    print(ps_df_drop_name_gender.groupby('real').mean())
 
     print('== 3 ==')
-    print(ps_df.groupby(['real', 'gender']).sum())
-    print(ps_df.groupby(['real', 'gender']).max())
-    print(ps_df.groupby(['real', 'gender']).mean())
+    print(ps_df_drop_name.groupby(['real', 'gender']).sum())
+    print(ps_df_drop_name.groupby(['real', 'gender']).max())
+    print(ps_df_drop_name.groupby(['real', 'gender']).mean())
 
 
 def plotting_test():
