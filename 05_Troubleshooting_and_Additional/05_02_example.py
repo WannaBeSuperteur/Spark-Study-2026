@@ -13,6 +13,15 @@ os.environ["PYSPARK_DRIVER_PYTHON"] = sys.executable
 os.environ["SPARK_LOCAL_IP"] = "127.0.0.1"
 os.environ["SPARK_LOCAL_HOSTNAME"] = "localhost"
 
+current_file_path = os.path.abspath(__file__)
+parent_dir = os.path.dirname(os.path.dirname(current_file_path))
+
+print(f'current_file_path: {current_file_path}')
+print(f'parent_dir: {parent_dir}')
+
+os.environ["HADOOP_HOME"] = os.path.join(parent_dir, "hadoop")
+os.environ["PATH"] += os.pathsep + os.path.join(parent_dir, r"hadoop\bin")
+
 
 def create_object_test(spark):
     df_dict = {
@@ -48,6 +57,8 @@ def create_object_test(spark):
     ps_df.sort_values(by='score')
     print(ps_df)
     print(ps_df.sort_values(by='score'))
+
+    return ps_df
 
 
 def missing_data_test():
@@ -109,7 +120,12 @@ if __name__ == '__main__':
     print(f"Spark UI URL: {spark.sparkContext.uiWebUrl}")
 
     print("\n==== 01. CREATE OBJECT TEST ====")
-    create_object_test(spark)
+    ps_df = create_object_test(spark)
+
+    print('[ Spark IO test ]')
+    ps_df.spark.to_spark_io('test.orc', format='orc')
+    print(ps.read_spark_io('test.orc', format='orc').head(2))
+    print('[ Spark IO test finished ]')
 
     print("\n==== 02. MISSING DATA TEST ====")
     missing_data_test()

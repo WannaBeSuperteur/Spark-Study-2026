@@ -8,7 +8,6 @@
   * [2-3. Grouping (```groupby```)](#2-3-grouping-groupby)
   * [2-4. Plotting (데이터 시각화)](#2-4-plotting-데이터-시각화)
 * [3. csv, parquet 으로 읽고 쓰기](#3-csv-parquet-으로-읽고-쓰기)
-* [4. Spark 에서의 설정 적용하기](#4-spark-에서의-설정-적용하기)
 
 ## 1. ```pyspark.pandas``` 모듈 개요
 
@@ -168,7 +167,22 @@ test_series_ps.cummax().plot()
 
 ## 3. csv, parquet 으로 읽고 쓰기
 
-## 4. Spark 에서의 설정 적용하기
+```python
+print('[ Spark IO test ]')
+ps_df.spark.to_spark_io('test.orc', format='orc')
+print(ps.read_spark_io('test.orc', format='orc').head(2))
+print('[ Spark IO test finished ]')
+```
+
+* 실행 결과
+
+```
+[ Spark IO test ]
+            name  age  score                                                    
+0  Jang Wonyoung   21   83.1
+1        Oh-LoRA   22   81.5
+[ Spark IO test finished ]
+```
 
 ## 참고 자료
 
